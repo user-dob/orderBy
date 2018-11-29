@@ -6,4 +6,15 @@ export const createCompareFunction = orders => {
 	return new Function('left', 'right', `return ${body}`);
 }
 
-export const orderBy = (items, ...orders) => items.sort(createCompareFunction(orders));
+export const orderBy = (items, ...orders) => {
+	return items
+		.map(item => {
+			return orders.reduce((data, [field, order, compare]) => {
+				const value = item[field];
+				data[field] = compare ? compare(value) : value;
+				return data;
+			}, {__value: item});
+		})
+		.sort(createCompareFunction(orders))
+		.map(item => item.__value);
+};

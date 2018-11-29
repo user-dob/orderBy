@@ -181,5 +181,17 @@ describe('orderBy', () => {
 		expect(expectItems).to.eql(orderBy(items, ['a', 'DESC'], ['b', 'DESC']));
 	})
 
+	it('orderBy with compare', () => {
+		let items, expectItems;
 
+		items = [{a: '00'}, {a: '0'}, {a: '000'}];
+		expectItems = [{a: '0'}, {a: '00'}, {a: '000'}];
+
+		expect(expectItems).to.eql(orderBy(items, ['a', 'ASC', a => a.length]));
+
+		items = [{a: '0', b: 2}, {a: '0', b: 1}, {a: '000', b: 2}];
+		expectItems = [{a: '000', b: 2}, {a: '0', b: 2}, {a: '0', b: 1}];
+
+		expect(expectItems).to.eql(orderBy(items, ['a', 'DESC', a => a.length], ['b', 'DESC']));
+	})
 })
